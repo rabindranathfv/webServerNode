@@ -8,6 +8,6 @@ http.createServer((req, resp) => {
         edad: 28,
         url: req.url
     };
-    resp.write(answ.nombre);
+    resp.write(JSON.stringify(answ));
     resp.end();
 }).listen(8080);
