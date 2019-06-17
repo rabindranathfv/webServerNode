@@ -3,45 +3,17 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const userRoute = require('./routes/users');
 
 // parse applicattion /x-www/form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/users', (req, res) => {
-    res.json('get Users');
-});
-
-app.post('/users', (req, res) => {
-    let body = req.body;
-    if (body.name === undefined) {
-        res.status(400).json({
-            ok: false,
-            message: 'name is required'
-        });
-    } else {
-        res.json({
-            user: body
-        });
-    }
-});
-
-app.put('/users/:id', (req, res) => {
-    let id = req.params.id;
-    console.log(id);
-    res.json({
-        id
-    });
-});
-
-app.delete('/users', (req, res) => {
-    res.json('delete Users');
-});
+app.use(userRoute);
 
 mongoose.connect('mongodb://localhost:27017/coffe', (err, resp) => {
-    if (err) throw new Error(err)
+    if (err) console.log(err)
     console.log('DB Connection sucessfully');
 });
 
