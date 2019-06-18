@@ -1,5 +1,7 @@
 const express = require('express');
 const UserModel = require('../models/users');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const app = express();
 
@@ -15,7 +17,7 @@ app.post('/users', (req, res) => {
     let user = new UserModel({
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, saltRounds),
         rol: body.rol
     });
 
