@@ -93,10 +93,19 @@ app.delete('/users/:id', (req, res) => {
     let idUser = req.params.id;
 
     UserModel.findByIdAndRemove(idUser, (err, userDelete) => {
+        console.log('*** User ****', userDelete);
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err
+            });
+        }
+        if (!userDelete) {
+            return res.status(400).json({
+                ok: false,
+                error: {
+                    message: 'User does not exist'
+                }
             });
         }
         res.json({
