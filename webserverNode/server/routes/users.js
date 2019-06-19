@@ -103,7 +103,7 @@ app.delete('/users/:id', (req, res) => {
         if (!userDelete) {
             return res.status(400).json({
                 ok: false,
-                error: {
+                err: {
                     message: 'User does not exist'
                 }
             });
