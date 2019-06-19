@@ -1,6 +1,7 @@
 const express = require('express');
 const UserModel = require('../models/users');
 const bcrypt = require('bcrypt');
+const _ = require('underscore');
 const saltRounds = 10;
 
 const app = express();
@@ -41,11 +42,13 @@ app.post('/users', (req, res) => {
 
 app.put('/users/:id', (req, res) => {
     let id = req.params.id;
-    let body = req.body;
+    // _.pick grabs and object and return the same object with keys you defined into arrays as second parameter
+    let body = _.pick(req.body, ['name', 'email', 'img', 'rol', 'state']);
     console.log('***** BODY From request ***********', body);
-    UserModel.findByIdAndUpdate(id, body, { new: true }, (err, userDB) => {
+    // add context: query for update email into this validation
+    UserModel.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, userDB) => {
         if (err) {
-            return req.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 err
             });
