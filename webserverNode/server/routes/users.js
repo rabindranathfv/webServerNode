@@ -8,19 +8,29 @@ const app = express();
 
 app.get('/users', (req, res) => {
 
-    UserModel.find({}).exec((err, usersLists) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+    // route /users?limit=<value>&start=<value>
+    let start = req.query.start || 0;
+    start = Number(start);
+    let limit = req.query.limit || 15;
+    limit = Number(limit);
+
+    console.log(start, limit);
+    UserModel.find({})
+        .skip(start)
+        .limit(limit)
+        .exec((err, usersLists) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                message: 'get list of users successfully',
+                user: usersLists
             });
-        }
-        res.json({
-            ok: true,
-            message: 'get list of users successfully',
-            user: usersLists
         });
-    });
 
 });
 
