@@ -30,9 +30,9 @@ app.post('/users', (req, res) => {
                 err
             });
         }
-        res.status(200).json({
+        res.json({
             ok: true,
-            msg: 'create users sucessfully',
+            message: 'create users sucessfully',
             user: userDB
         });
     });
@@ -41,10 +41,22 @@ app.post('/users', (req, res) => {
 
 app.put('/users/:id', (req, res) => {
     let id = req.params.id;
-    console.log(id);
-    res.json({
-        id
+    let body = req.body;
+    console.log('***** BODY From request ***********', body);
+    UserModel.findByIdAndUpdate(id, body, { new: true }, (err, userDB) => {
+        if (err) {
+            return req.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'Update user sucessfully',
+            user: userDB
+        });
     });
+
 });
 
 app.delete('/users', (req, res) => {
