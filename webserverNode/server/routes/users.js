@@ -7,7 +7,21 @@ const saltRounds = 10;
 const app = express();
 
 app.get('/users', (req, res) => {
-    res.json('get Users');
+
+    UserModel.find({}).exec((err, usersLists) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'get list of users successfully',
+            user: usersLists
+        });
+    });
+
 });
 
 app.post('/users', (req, res) => {
