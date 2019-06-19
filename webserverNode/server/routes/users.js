@@ -15,7 +15,7 @@ app.get('/users', (req, res) => {
     limit = Number(limit);
 
     // the find condition and count condition must be the same for count in the right way
-    UserModel.find({})
+    UserModel.find({ state: true })
         .skip(start)
         .limit(limit)
         .exec((err, usersLists) => {
@@ -25,7 +25,7 @@ app.get('/users', (req, res) => {
                     err
                 });
             }
-            UserModel.count({}, (err, numUsers) => {
+            UserModel.count({ state: true }, (err, numUsers) => {
                 res.json({
                     ok: true,
                     message: 'get list of users successfully',
