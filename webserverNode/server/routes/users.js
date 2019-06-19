@@ -14,7 +14,7 @@ app.get('/users', (req, res) => {
     let limit = req.query.limit || 15;
     limit = Number(limit);
 
-    console.log(start, limit);
+    // the find condition and count condition must be the same for count in the right way
     UserModel.find({})
         .skip(start)
         .limit(limit)
@@ -25,10 +25,13 @@ app.get('/users', (req, res) => {
                     err
                 });
             }
-            res.json({
-                ok: true,
-                message: 'get list of users successfully',
-                user: usersLists
+            UserModel.count({}, (err, numUsers) => {
+                res.json({
+                    ok: true,
+                    message: 'get list of users successfully',
+                    amountUsers: numUsers,
+                    user: usersLists
+                });
             });
         });
 
@@ -86,8 +89,22 @@ app.put('/users/:id', (req, res) => {
 
 });
 
-app.delete('/users', (req, res) => {
-    res.json('delete Users');
+app.delete('/users/:id', (req, res) => {
+    let idUser = req.params.id;
+
+    UserModel.findByIdAndRemove(idUser, (err, userDelete) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'user delete sucessfully',
+            user: userDelete
+        });
+    })
 });
 
 module.exports = app;
