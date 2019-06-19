@@ -113,7 +113,36 @@ app.delete('/users/:id', (req, res) => {
             message: 'user delete sucessfully',
             user: userDelete
         });
-    })
+    });
+});
+
+app.delete('/users/2/:id', (req, res) => {
+    let idUser = req.params.id;
+    req.body.state = false;
+    let body = _.pick(req.body, ['state']);
+
+    UserModel.findByIdAndUpdate(idUser, body, { new: true, runValidators: true, context: 'query' }, (err, userDelete) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!userDelete) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'User does not exist'
+                }
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'Update user sucessfully',
+            user: userDelete
+        });
+    });
 });
 
 module.exports = app;
