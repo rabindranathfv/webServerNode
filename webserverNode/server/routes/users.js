@@ -9,13 +9,14 @@ const app = express();
 app.get('/users', (req, res) => {
 
     // route /users?limit=<value>&start=<value>
+    console.log(` QueryParams `, req.query);
     let start = req.query.start || 0;
     start = Number(start);
     let limit = req.query.limit || 15;
     limit = Number(limit);
 
     // the find condition and count condition must be the same for count in the right way
-    UserModel.find({ state: true })
+    UserModel.find({ state: true }, 'name email rol')
         .skip(start)
         .limit(limit)
         .exec((err, usersLists) => {
@@ -68,6 +69,7 @@ app.post('/users', (req, res) => {
 });
 
 app.put('/users/:id', (req, res) => {
+    console.log(`Los params son `, req.params);
     let id = req.params.id;
     // _.pick grabs and object and return the same object with keys you defined into arrays as second parameter
     let body = _.pick(req.body, ['name', 'email', 'img', 'rol', 'state']);

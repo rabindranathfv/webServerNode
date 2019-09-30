@@ -41,6 +41,7 @@ let userSchema = new Schema({
     }
 });
 
+// define with fields i want to return, i am protecting info users
 userSchema.methods.toJSON = function() {
     let user = this;
     let userObj = user.toObject();
@@ -48,6 +49,7 @@ userSchema.methods.toJSON = function() {
     return userObj;
 }
 
+// use plugin
 userSchema.plugin(uniqueValidator, { message: '{PATH} emil must be unique' });
 
 module.exports = mongoose.model('user', userSchema);
