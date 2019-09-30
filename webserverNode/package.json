@@ -1,6 +1,9 @@
 {
     "name": "webservernode",
     "version": "1.0.0",
+    "engines": {
+        "node": "10.14.2"
+    },
     "description": "webserver using nodeJs/ExpressJs",
     "main": "app.js",
     "scripts": {

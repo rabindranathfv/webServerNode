@@ -26,7 +26,7 @@ app.get('/users', (req, res) => {
                     err
                 });
             }
-            UserModel.count({ state: true }, (err, numUsers) => {
+            UserModel.countDocuments({ state: true }, (err, numUsers) => {
                 res.json({
                     ok: true,
                     message: 'get list of users successfully',

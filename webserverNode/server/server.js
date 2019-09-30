@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 app.use(userRoute);
 
-mongoose.connect('mongodb://localhost:27017/coffe', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err, resp) => {
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err, resp) => {
     if (err) console.log(err)
     console.log('DB Connection sucessfully');
 });
