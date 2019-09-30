@@ -12,10 +12,12 @@ app.use(bodyParser.json());
 
 app.use(userRoute);
 
-mongoose.connect('mongodb://localhost:27017/coffe', (err, resp) => {
+mongoose.connect('mongodb://localhost:27017/coffe', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err, resp) => {
     if (err) console.log(err)
     console.log('DB Connection sucessfully');
 });
+
+/* mongodb+srv://rabin:Xa15L3bT1LfWkH0X@clustercoffedb-r82zt.gcp.mongodb.net/coffe */
 
 app.listen(process.env.PORT, () => {
     console.log(`Escuchando en el puerto ${process.env.PORT}`);

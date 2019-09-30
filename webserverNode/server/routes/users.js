@@ -91,6 +91,7 @@ app.put('/users/:id', (req, res) => {
 
 });
 
+/* hard delete */
 app.delete('/users/:id', (req, res) => {
     let idUser = req.params.id;
 
@@ -118,6 +119,7 @@ app.delete('/users/:id', (req, res) => {
     });
 });
 
+/* soft delete */
 app.delete('/users/2/:id', (req, res) => {
     let idUser = req.params.id;
     req.body.state = false;
