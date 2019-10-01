@@ -39,7 +39,7 @@ app.get('/users', checkToken, (req, res) => {
 
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', checkToken, (req, res) => {
     let body = req.body;
 
     console.log('***** Body data *****', req.body);
@@ -69,7 +69,7 @@ app.post('/users', (req, res) => {
 
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', checkToken, (req, res) => {
     console.log(`Los params son `, req.params);
     let id = req.params.id;
     // _.pick grabs and object and return the same object with keys you defined into arrays as second parameter
@@ -93,7 +93,7 @@ app.put('/users/:id', (req, res) => {
 });
 
 /* hard delete */
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', checkToken, (req, res) => {
     let idUser = req.params.id;
 
     UserModel.findByIdAndRemove(idUser, (err, userDelete) => {
@@ -121,7 +121,7 @@ app.delete('/users/:id', (req, res) => {
 });
 
 /* soft delete */
-app.delete('/users/2/:id', (req, res) => {
+app.delete('/users/2/:id', checkToken, (req, res) => {
     let idUser = req.params.id;
     req.body.state = false;
     let body = _.pick(req.body, ['state']);
