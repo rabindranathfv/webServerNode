@@ -75,7 +75,7 @@ app.put('/users/:id', (req, res) => {
     let body = _.pick(req.body, ['name', 'email', 'img', 'rol', 'state']);
     console.log('***** BODY From request ***********', body);
     // add context: query for update email into this validation
-    UserModel.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, userDB) => {
+    UserModel.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query', useFindAndModify: 'false' }, (err, userDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
