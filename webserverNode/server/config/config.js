@@ -4,6 +4,16 @@ process.env.PORT = process.env.PORT || 3000;
 // ########## Enviroments
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
+// ######## token time
+// 60 min
+// 60 seg
+// 24 hours
+// 30 days
+process.env.TIME_TOKEN = 60 * 60 * 24 * 30;
+
+// ####### SEED AUTH
+process.env.SEED = process.env.SEED || 'token-seed-prod';
+
 // ###########  BD Config
 
 let urlDB;
