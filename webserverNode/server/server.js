@@ -13,7 +13,7 @@ app.use(require('./routes/indexRoutes'));
 
 mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, (err, resp) => {
     if (err) console.log(err)
-    console.log('DB Connection sucessfully');
+    console.log('DB Connection sucessfully', process.env.URLDB);
 });
 
 app.listen(process.env.PORT, () => {

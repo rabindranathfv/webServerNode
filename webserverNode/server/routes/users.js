@@ -2,11 +2,12 @@ const express = require('express');
 const UserModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { checkToken } = require('../middleware/auth');
 const saltRounds = 10;
 
 const app = express();
 
-app.get('/users', (req, res) => {
+app.get('/users', checkToken, (req, res) => {
 
     // route /users?limit=<value>&start=<value>
     console.log(` QueryParams `, req.query);
