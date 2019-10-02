@@ -10,7 +10,6 @@ let checkToken = (req, res, next) => {
                 err
             });
         }
-        console.log(decoded);
         req.user = decoded.user;
         next();
     })

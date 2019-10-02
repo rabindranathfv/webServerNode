@@ -10,6 +10,7 @@ const app = express();
 app.get('/users', checkToken, (req, res) => {
 
     // route /users?limit=<value>&start=<value>
+    console.log(` get All Users `);
     console.log(` QueryParams `, req.query);
     let start = req.query.start || 0;
     start = Number(start);
@@ -41,7 +42,7 @@ app.get('/users', checkToken, (req, res) => {
 
 app.post('/users', checkToken, (req, res) => {
     let body = req.body;
-
+    console.log(` POST Create Users `);
     console.log('***** Body data *****', req.body);
 
     let user = new UserModel({
@@ -70,6 +71,7 @@ app.post('/users', checkToken, (req, res) => {
 });
 
 app.put('/users/:id', checkToken, (req, res) => {
+    console.log(` Update user By ID Users `);
     console.log(`Los params son `, req.params);
     let id = req.params.id;
     // _.pick grabs and object and return the same object with keys you defined into arrays as second parameter
@@ -94,6 +96,7 @@ app.put('/users/:id', checkToken, (req, res) => {
 
 /* hard delete */
 app.delete('/users/:id', checkToken, (req, res) => {
+    console.log(` Delete Users - hard delete `);
     let idUser = req.params.id;
 
     UserModel.findByIdAndRemove(idUser, (err, userDelete) => {
@@ -122,6 +125,7 @@ app.delete('/users/:id', checkToken, (req, res) => {
 
 /* soft delete */
 app.delete('/users/2/:id', checkToken, (req, res) => {
+    console.log(` delete User - soft delete `);
     let idUser = req.params.id;
     req.body.state = false;
     let body = _.pick(req.body, ['state']);
