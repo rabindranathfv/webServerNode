@@ -2,7 +2,7 @@ const express = require('express');
 const UserModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-const { checkToken } = require('../middleware/auth');
+const { checkToken, checkAdMinRole } = require('../middleware/auth');
 const saltRounds = 10;
 
 const app = express();
@@ -40,7 +40,7 @@ app.get('/users', checkToken, (req, res) => {
 
 });
 
-app.post('/users', checkToken, (req, res) => {
+app.post('/users', [checkToken, checkAdMinRole], (req, res) => {
     let body = req.body;
     console.log(` POST Create Users `);
     console.log('***** Body data *****', req.body);
@@ -70,7 +70,7 @@ app.post('/users', checkToken, (req, res) => {
 
 });
 
-app.put('/users/:id', checkToken, (req, res) => {
+app.put('/users/:id', [checkToken, checkAdMinRole], (req, res) => {
     console.log(` Update user By ID Users `);
     console.log(`Los params son `, req.params);
     let id = req.params.id;
@@ -95,7 +95,7 @@ app.put('/users/:id', checkToken, (req, res) => {
 });
 
 /* hard delete */
-app.delete('/users/:id', checkToken, (req, res) => {
+app.delete('/users/:id', [checkToken, checkAdMinRole], (req, res) => {
     console.log(` Delete Users - hard delete `);
     let idUser = req.params.id;
 

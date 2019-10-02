@@ -7,7 +7,9 @@ let checkToken = (req, res, next) => {
         if (err) {
             return res.status(401).json({
                 ok: false,
-                err
+                err: {
+                    message: '401 UnAuthorized - user without token'
+                }
             });
         }
         req.user = decoded.user;
@@ -15,6 +17,25 @@ let checkToken = (req, res, next) => {
     })
 }
 
+let checkAdMinRole = (req, res, next) => {
+
+    let user = req.user;
+    console.log(' middleware checkAdminRole', user);
+
+    if (user.rol === 'ADMIN_ROLE') {
+        console.log(`this ${user.name} is Admin`);
+        next();
+    } else {
+        return res.json({
+            ok: false,
+            err: {
+                message: 'this user is not admin'
+            }
+        });
+    }
+}
+
 module.exports = {
-    checkToken
+    checkToken,
+    checkAdMinRole
 }
