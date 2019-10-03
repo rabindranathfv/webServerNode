@@ -9,7 +9,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // 60 seg
 // 24 hours
 // 30 days
-process.env.TIME_TOKEN = 60 * 60 * 24 * 30;
+// process.env.TIME_TOKEN = 60 * 60 * 24 * 30;
+process.env.TIME_TOKEN = "24h";
 
 // ####### SEED AUTH
 process.env.SEED = process.env.SEED || 'token-seed-prod';

@@ -40,7 +40,7 @@ app.get('/users', checkToken, (req, res) => {
 
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', [checkToken, checkAdMinRole], (req, res) => {
     let body = req.body;
     console.log(` POST Create Users `);
     console.log('***** Body data *****', req.body);
