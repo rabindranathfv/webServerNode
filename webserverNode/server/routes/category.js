@@ -90,7 +90,7 @@ app.put('/category/:id', checkToken, (req, res) => {
     console.log(` update category by id `);
     let categoryId = req.params.id;
     let body = req.body;
-    CategoryModel.findByIdAndUpdate(categoryId, body, { new: true, runValidators: true, context: 'query', useFindAndModify: 'false' }, (err, categoryDB) => {
+    CategoryModel.findByIdAndUpdate(categoryId, body, { new: true, runValidators: true, useFindAndModify: 'false' }, (err, categoryDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
