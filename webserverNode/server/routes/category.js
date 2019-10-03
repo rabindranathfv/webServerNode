@@ -10,7 +10,7 @@ const UserModel = require('../models/users');
 /* all categorys */
 app.get('/category', checkToken, (req, res) => {
     console.log(` get All categories `);
-    CategoryModel.find()
+    CategoryModel.find({})
         .exec((err, categoryList) => {
             if (err) {
                 return res.status(400).json({
@@ -19,6 +19,7 @@ app.get('/category', checkToken, (req, res) => {
                 });
             }
             CategoryModel.countDocuments((err, numCategories) => {
+                console.log(categoryList);
                 res.json({
                     ok: true,
                     message: 'get all list of category',
@@ -54,14 +55,22 @@ app.get('/category/:id', checkToken, (req, res) => {
 app.post('/category', checkToken, (req, res) => {
     console.log(` Create category `);
     let body = req.body;
-
-    let category = new Category({
-        name: body.name,
-        user: body.userId
+    let user = req.user;
+    console.log(user, body);
+    let category = new CategoryModel({
+        description: body.description,
+        user: user._id
     });
 
+    console.log(category);
     category.save((err, categDB) => {
         if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+        if (!categDB) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -97,7 +106,7 @@ app.put('/category/:id', checkToken, (req, res) => {
 
 });
 
-/* solo el admin puede borrar categorias */
+/* just admin role can deleted */
 /* delete category */
 app.delete('/category/:id', [checkToken, checkAdMinRole], (req, res) => {
     console.log(` delete category by Id`);

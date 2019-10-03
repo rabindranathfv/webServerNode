@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 const UserModel = require('./users');
 
+mongoose.set('useFindAndModify', false);
+
 let Schema = mongoose.Schema;
 
 let categorySchema = new Schema({
-    name: {
+    description: {
         type: String,
-        required: [true, 'name is required']
+        unique: true,
+        required: [true, 'description is required']
     },
     user: {
-        type: UserModel,
-        required: [false]
+        type: Object
     }
 });
 
