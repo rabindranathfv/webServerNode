@@ -11,6 +11,7 @@ const UserModel = require('../models/users');
 app.get('/category', checkToken, (req, res) => {
     console.log(` get All categories `);
     CategoryModel.find({})
+        .sort('description')
         .exec((err, categoryList) => {
             if (err) {
                 return res.status(400).json({
