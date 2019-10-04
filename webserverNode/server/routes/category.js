@@ -12,6 +12,7 @@ app.get('/category', checkToken, (req, res) => {
     console.log(` get All categories `);
     CategoryModel.find({})
         .sort('description')
+        .populate('user', 'name email rol')
         .exec((err, categoryList) => {
             if (err) {
                 return res.status(400).json({
@@ -20,7 +21,6 @@ app.get('/category', checkToken, (req, res) => {
                 });
             }
             CategoryModel.countDocuments((err, numCategories) => {
-                console.log(categoryList);
                 res.json({
                     ok: true,
                     message: 'get all list of category',
@@ -39,7 +39,7 @@ app.get('/category/:id', checkToken, (req, res) => {
 
     CategoryModel.findByIdAndUpdate(categoryId, body, { new: true, runValidators: true, useFindAndModify: 'false' }, (err, categoryDB) => {
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
@@ -100,7 +100,7 @@ app.put('/category/:id', checkToken, (req, res) => {
         }
         res.json({
             ok: true,
-            message: 'Update category by Id',
+            message: `Update ${categoryDB._id} category by Id`,
             category: categoryDB
         });
     });
@@ -122,8 +122,8 @@ app.delete('/category/:id', [checkToken, checkAdMinRole], (req, res) => {
         }
         res.json({
             ok: true,
-            message: 'category delte sucessfully',
-            cateogry: categoryDelete
+            message: `category ${categoryId} delte sucessfully`,
+            categoryId: categoryId
         });
     });
 });

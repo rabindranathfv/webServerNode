@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 var productSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'El nombre es necesario']
+        required: [true, 'the name is mandatory']
     },
     priceUnit: {
         type: Number,
-        required: [true, 'El precio únitario es necesario']
+        required: [true, 'the Unit price is mandatory']
     },
     description: {
         type: String,
@@ -22,15 +22,13 @@ var productSchema = new Schema({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'Category',
+        ref: 'category',
         required: true
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'user'
     }
-    /* categoria: { type: Schema.Types.ObjectId, ref: 'Categoria', required: true },
-    usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' } */
 });
 
 
