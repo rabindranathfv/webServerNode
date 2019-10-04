@@ -64,6 +64,33 @@ app.get('/products/:id', checkToken, (req, res) => {
 
 
 /* 
+    Search products by term
+*/
+app.get('/products/search/:searchTerm', checkToken, (req, res) => {
+    let term = req.params.searchTerm;
+    let regEx = new RegExp(term, 'i');
+    console.log(`buscando el termino ${term}`);
+
+    ProductModel.find({ name: { "$regex": term, "$options": "i" } })
+        .populate('product', 'name')
+        .exec((err, productDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                message: `coincidences of ${term}`,
+                products: productDB
+            });
+
+        });
+
+});
+
+/* 
     create product, save user, save category
 */
 app.post('/products', checkToken, (req, res) => {
