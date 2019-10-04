@@ -44,19 +44,22 @@ app.get('/products/:id', checkToken, (req, res) => {
     console.log(` get products by id `);
     let productId = req.params.id;
     let body = req.body
-    ProductModel.findByIdAndUpdate(productId, body, { new: true, runValidators: true, useFindAndModify: 'false' }, (err, productDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+    ProductModel.findByIdAndUpdate(productId, body, { new: true, runValidators: true, useFindAndModify: 'false' })
+        .populate('user', 'name email rol')
+        .populate('category', 'description')
+        .exec((err, productDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                messaage: `the product ${productId} was updated suucessfully`,
+                product: productDB
             });
-        }
-        res.json({
-            ok: true,
-            messaage: `the product ${productId} was updated suucessfully`,
-            product: productDB
         });
-    });
 });
 
 
