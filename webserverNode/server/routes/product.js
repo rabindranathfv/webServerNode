@@ -68,7 +68,6 @@ app.get('/products/:id', checkToken, (req, res) => {
 */
 app.get('/products/search/:searchTerm', checkToken, (req, res) => {
     let term = req.params.searchTerm;
-    let regEx = new RegExp(term, 'i');
     console.log(`buscando el termino ${term}`);
 
     ProductModel.find({ name: { "$regex": term, "$options": "i" } })
