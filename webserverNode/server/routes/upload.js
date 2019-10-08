@@ -1,9 +1,13 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const { checkToken } = require('../middleware/auth');
+
+// models
 const UserModel = require('../models/users');
 const ProductModel = require('../models/products');
 
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
@@ -69,7 +73,7 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
             });
         }
 
-        uploadImgUser(id, res, nameSaveFile);
+        uploadImgUser(id, res, nameSaveFile, type);
         /* res.json({
             ok: true,
             message: 'File uploaded!',
@@ -78,7 +82,7 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
     });
 });
 
-function uploadImgUser(id, res, nameF) {
+function uploadImgUser(id, res, nameF, type) {
 
     UserModel.findById(id, (err, userDB) => {
         if (err) {
@@ -97,9 +101,9 @@ function uploadImgUser(id, res, nameF) {
             });
         }
 
-        console.log(UserModel.img);
+        deleteFile(userDB.img, type)
+
         userDB.img = nameF;
-        console.log(UserModel.img);
         userDB.save((err, userDBSave) => {
             res.json({
                 ok: true,
@@ -113,6 +117,13 @@ function uploadImgUser(id, res, nameF) {
 
 function uploadImgProduct() {
 
+}
+
+function deleteFile(imgName, type) {
+    let pathImg = path.resolve(__dirname, `./../../uploads/${type}/${imgName}`);
+    if (fs.existsSync(pathImg)) {
+        fs.unlinkSync(pathImg);
+    }
 }
 
 module.exports = app;
