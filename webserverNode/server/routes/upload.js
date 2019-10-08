@@ -8,8 +8,10 @@ const app = express();
 // upload files
 app.use(fileUpload({ useTempFiles: true }));
 
-app.post('/upload', (req, res) => {
-    console.log('upload files');
+app.put('/upload/:type/:id', checkToken, (req, res) => {
+    let type = req.params.type;
+    let id = req.params.id;
+    console.log('upload files', type, id);
     if (!req.files) {
         return res.status(400).json({
             ok: false,
@@ -18,12 +20,30 @@ app.post('/upload', (req, res) => {
             }
         });
     }
+
+    /* validate type of entity for save into DB */
+    let validTypes = ['user', 'product'];
+
+    if (validTypes.indexOf(type) < 0) {
+        return res.status(400).json({
+            ok: false,
+            err: {
+                message: `the types allowed are ${validTypes.join(', ')}`,
+                type: `${type}`
+            }
+        });
+    }
+
+    /* validate if the id exist */
+
+
     let sampleFile = req.files.sampleFile;
     let nameFileSplited = sampleFile.name.split('.');
     let extensionFile = nameFileSplited[nameFileSplited.length - 1];
 
     console.log(`se proceso ${nameFileSplited} y su extension es ${extensionFile}`);
 
+    /* validate type by extension */
     let validateImgFiles = ['png', 'jpg', 'gif', 'jepg'];
 
     if (validateImgFiles.indexOf(extensionFile) < 0) {
@@ -36,8 +56,10 @@ app.post('/upload', (req, res) => {
         });
     }
 
+    let nameSaveFile = `${id}-${type}-${ new Date().getMilliseconds() }.${extensionFile}`
+
     // Use the mv() method to place the file somewhere on your server
-    sampleFile.mv(`uploads/${sampleFile.name}`, (err) => {
+    sampleFile.mv(`uploads/${type}/${nameSaveFile}`, (err) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
