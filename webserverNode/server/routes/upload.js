@@ -40,9 +40,6 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
         });
     }
 
-    /* validate if the id exist */
-
-
     let sampleFile = req.files.sampleFile;
     let nameFileSplited = sampleFile.name.split('.');
     let extensionFile = nameFileSplited[nameFileSplited.length - 1];
@@ -64,6 +61,7 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
 
     let nameSaveFile = `${id}-${type}-${ new Date().getMilliseconds() }.${extensionFile}`
 
+
     // Use the mv() method to place the file somewhere on your server
     sampleFile.mv(`uploads/${type}/${nameSaveFile}`, (err) => {
         if (err) {
@@ -74,6 +72,7 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
         }
 
         uploadImgUser(id, res, nameSaveFile, type);
+
         /* res.json({
             ok: true,
             message: 'File uploaded!',
@@ -86,6 +85,7 @@ function uploadImgUser(id, res, nameF, type) {
 
     UserModel.findById(id, (err, userDB) => {
         if (err) {
+            deleteFile(nameF, type);
             return res.status(500).json({
                 ok: false,
                 err
@@ -93,6 +93,7 @@ function uploadImgUser(id, res, nameF, type) {
         }
 
         if (!userDB) {
+            deleteFile(nameF, type);
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -101,7 +102,7 @@ function uploadImgUser(id, res, nameF, type) {
             });
         }
 
-        deleteFile(userDB.img, type)
+        deleteFile(userDB.img, type);
 
         userDB.img = nameF;
         userDB.save((err, userDBSave) => {
@@ -120,7 +121,7 @@ function uploadImgProduct() {
 }
 
 function deleteFile(imgName, type) {
-    let pathImg = path.resolve(__dirname, `./../../uploads/${type}/${imgName}`);
+    let pathImg = path.resolve(__dirname, `../../uploads/${type}/${imgName}`);
     if (fs.existsSync(pathImg)) {
         fs.unlinkSync(pathImg);
     }
