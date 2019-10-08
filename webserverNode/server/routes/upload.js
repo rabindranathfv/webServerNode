@@ -1,9 +1,11 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const { checkToken } = require('../middleware/auth');
+const UserModel = require('../models/users');
+const ProductModel = require('../models/products');
+
 
 const app = express();
-
 
 // upload files
 app.use(fileUpload({ useTempFiles: true }));
@@ -66,13 +68,51 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
                 err
             });
         }
-        res.json({
+
+        uploadImgUser(id, res, nameSaveFile);
+        /* res.json({
             ok: true,
             message: 'File uploaded!',
             fileUpload: sampleFile.name
-        });
+        }); */
     });
 });
 
+function uploadImgUser(id, res, nameF) {
+
+    UserModel.findById(id, (err, userDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!userDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: `user ${id} doesn't exist`
+                }
+            });
+        }
+
+        console.log(UserModel.img);
+        userDB.img = nameF;
+        console.log(UserModel.img);
+        userDB.save((err, userDBSave) => {
+            res.json({
+                ok: true,
+                message: `user ${id} is updated sucessfully`,
+                user: userDBSave
+            });
+        });
+    });
+
+}
+
+function uploadImgProduct() {
+
+}
 
 module.exports = app;
