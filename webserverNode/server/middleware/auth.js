@@ -17,6 +17,23 @@ let checkToken = (req, res, next) => {
     })
 }
 
+let checkTokenUrl = (req, res, next) => {
+    let authToken = req.query.token;
+
+    jwt.verify(authToken, process.env.SEED, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err: {
+                    message: '401 UnAuthorized - user without token'
+                }
+            });
+        }
+        req.user = decoded.user;
+        next();
+    })
+}
+
 let checkAdMinRole = (req, res, next) => {
 
     let user = req.user;
@@ -37,5 +54,6 @@ let checkAdMinRole = (req, res, next) => {
 
 module.exports = {
     checkToken,
-    checkAdMinRole
+    checkAdMinRole,
+    checkTokenUrl
 }
