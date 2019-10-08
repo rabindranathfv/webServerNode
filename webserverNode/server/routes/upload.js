@@ -71,7 +71,11 @@ app.put('/upload/:type/:id', checkToken, (req, res) => {
             });
         }
 
-        uploadImgUser(id, res, nameSaveFile, type);
+        if (type === 'user') {
+            uploadImgUser(id, res, nameSaveFile, type);
+        } else {
+            uploadImgProduct(id, res, nameSaveFile, type);
+        }
 
         /* res.json({
             ok: true,
@@ -116,7 +120,37 @@ function uploadImgUser(id, res, nameF, type) {
 
 }
 
-function uploadImgProduct() {
+function uploadImgProduct(id, res, nameF, type) {
+
+    ProductModel.findById(id, (err, productDB) => {
+        console.log(productDB);
+        if (err) {
+            deleteFile(nameF, type);
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+        if (!productDB) {
+            deleteFile(nameF, type);
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: `product ${id} doesn't exist`
+                }
+            });
+        }
+
+        deleteFile(productDB.img, type);
+        productDB.img = nameF;
+        productDB.save((err, productDBSave) => {
+            res.json({
+                ok: true,
+                message: `product ${id} is updated sucessfully`,
+                product: productDBSave
+            });
+        });
+    });
 
 }
 

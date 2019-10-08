@@ -20,6 +20,11 @@ var productSchema = new Schema({
         required: true,
         default: true
     },
+    img: {
+        type: String,
+        required: false,
+        default: null
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'category',
