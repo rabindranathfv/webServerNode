@@ -1,11 +1,11 @@
 const express = require('express');
-const { checkTokenUrl } = require('../middleware/auth');
+const { checkTokenUrl, checkToken } = require('../middleware/auth');
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
 
-app.get('/image/:type/:img', checkTokenUrl, (req, res) => {
+app.get('/image/:type/:img', checkToken, (req, res) => {
     let type = req.params.type;
     let img = req.params.img;
     let pathImg = path.resolve(__dirname, `../../uploads/${type}/${img}`);
