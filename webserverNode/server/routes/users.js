@@ -25,6 +25,7 @@ app.get('/users', checkToken, (req, res) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
+                    message: `not users exist`,
                     err
                 });
             }
@@ -35,6 +36,28 @@ app.get('/users', checkToken, (req, res) => {
                     amountUsers: numUsers,
                     user: usersLists
                 });
+            });
+        });
+
+});
+
+app.get('/users/:id', checkToken, (req, res) => {
+    let userId = req.params.id;
+    let body = req.body;
+    console.log(`get user with id ${userId}`);
+    UserModel.findByIdAndUpdate(userId, body, { new: true, runValidators: true, useFindAndModify: 'false' })
+        .exec((err, userDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    message: `the user doesn't exist`,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                message: `the user exist`,
+                user: userDB
             });
         });
 
@@ -58,6 +81,7 @@ app.post('/users', [checkToken, checkAdMinRole], (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with users creation, db troubles`,
                 err
             });
         }
@@ -82,6 +106,7 @@ app.put('/users/:id', [checkToken, checkAdMinRole], (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problem with users updated by Id`,
                 err
             });
         }
@@ -104,6 +129,7 @@ app.delete('/users/:id', [checkToken, checkAdMinRole], (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with users hard delete`,
                 err
             });
         }
@@ -134,6 +160,7 @@ app.delete('/users/2/:id', checkToken, (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with users soft delete`,
                 err
             });
         }

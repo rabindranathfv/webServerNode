@@ -17,6 +17,7 @@ app.get('/category', checkToken, (req, res) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
+                    message: `problems with get all category`,
                     err
                 });
             }
@@ -41,6 +42,7 @@ app.get('/category/:id', checkToken, (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
+                message: `problems with category by Id, category doesn't exist`,
                 err
             });
         }
@@ -68,12 +70,14 @@ app.post('/category', checkToken, (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
+                message: `problems with category create`,
                 err
             });
         }
         if (!categDB) {
             return res.status(400).json({
                 ok: false,
+                message: `can not create category in db`,
                 err
             });
         }
@@ -95,6 +99,7 @@ app.put('/category/:id', checkToken, (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with users hard delete`,
                 err
             });
         }
@@ -117,12 +122,13 @@ app.delete('/category/:id', [checkToken, checkAdMinRole], (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with category delete`,
                 err
             });
         }
         res.json({
             ok: true,
-            message: `category ${categoryId} delte sucessfully`,
+            message: `category ${categoryId} delete sucessfully`,
             categoryId: categoryId
         });
     });

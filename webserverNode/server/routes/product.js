@@ -21,6 +21,7 @@ app.get('/products', checkToken, (req, res) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
+                    message: `problems with get all products`,
                     err
                 });
             }
@@ -51,6 +52,7 @@ app.get('/products/:id', checkToken, (req, res) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
+                    message: `problems with products by Id, can not save into db`,
                     err
                 });
             }
@@ -76,6 +78,7 @@ app.get('/products/search/:searchTerm', checkToken, (req, res) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
+                    message: `problems with search products by name`,
                     err
                 });
             }
@@ -109,12 +112,14 @@ app.post('/products', checkToken, (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
+                message: `problems with create products`,
                 err
             });
         }
         if (!productDB) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with create products, can not save into db`,
                 err
             });
         }
@@ -137,6 +142,7 @@ app.put('/products/:id', checkToken, (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with get product by id`,
                 err
             });
         }
@@ -159,6 +165,7 @@ app.delete('/products/:id', checkToken, (req, res) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: `problems with hard delete products`,
                 err
             });
         }
