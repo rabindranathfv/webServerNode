@@ -94,6 +94,29 @@ app.post('/users', [checkToken, checkAdMinRole], (req, res) => {
 
 });
 
+app.put('/users/password', checkToken, (req, res) => {
+    let body = req.body;
+    let userId = body.id;
+    let cleanBody = _.pick(body, ['password']);
+    // _.pick grabs and object and return the same object with keys you defined into arrays as second parameter
+    cleanBody.password = bcrypt.hashSync(body.newPassword, saltRounds);
+
+    UserModel.findByIdAndUpdate(userId, cleanBody, { new: true, runValidators: true, context: 'query', useFindAndModify: 'false' }, (err, userDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                message: `problem with users updated by Id`,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            message: 'Update user password sucessfully',
+        });
+    });
+
+});
+
 app.put('/users/:id', [checkToken, checkAdMinRole], (req, res) => {
     console.log(` Update user By ID Users `);
     console.log(`Los params son `, req.params);

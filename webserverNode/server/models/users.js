@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 let rolesValid = {
     values: ['ADMIN_ROLE', 'USER_ROLE'],
@@ -49,6 +51,7 @@ userSchema.methods.toJSON = function() {
     delete userObj.password;
     return userObj;
 }
+
 
 // use plugin
 userSchema.plugin(uniqueValidator, { message: '{PATH} emil must be unique' });
