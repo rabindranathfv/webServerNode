@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
 // parse applicattion /x-www/form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
